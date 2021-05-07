@@ -1,6 +1,5 @@
 import os
 import sys
-import numpy as np
 import cv2
 import time
 import datetime
@@ -72,7 +71,7 @@ def process_timelapse_video(basePath, dateToProcess=datetime.datetime.now(), hou
         generate_timelapse_video(
             timelapse_images, 2048, 1536, video_filename)
     else:
-        print(f"No images to generate video")
+        print("No images to generate video")
 
 
 def run_loop(basePath, pause, config):
