@@ -6,7 +6,6 @@ import datetime
 from pathlib import Path
 from config import config
 
-
 def fade_in_frames(img1, img2, numFrames):
     transition_frames = []
     for IN in range(0, numFrames):
@@ -95,7 +94,7 @@ def run_loop(basePath, pause, config):
 
 
 if(__name__ == '__main__'):
-    if len(sys.argv) < 1:
+    if len(sys.argv) <= 1:
         exit()
     else:
         try:
