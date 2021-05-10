@@ -1,9 +1,16 @@
-FROM alexellis2/raspistill:latest
+FROM balenalib/raspberry-pi-debian-python:latest
 ENV TZ="Europe/London"
-ENTRYPOINT []
-RUN apt-get update -qy && apt-get install -qy python
+
+WORKDIR /usr/src/app
+
+RUN apt-get update -y && apt-get install -y python3-opencv
+RUN pip install opencv-python
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
 
 VOLUME /var/image/
 
-CMD ["python", "timelapse.py", "60"]
+CMD ["python", "timelapse.py", "24"]
