@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-debian-python:latest
+FROM alexellis2/raspistill:latest
 ENV TZ="Europe/London"
 
 WORKDIR /usr/src/app
