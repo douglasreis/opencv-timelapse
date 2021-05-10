@@ -3,8 +3,7 @@ ENV TZ="Europe/London"
 
 WORKDIR /usr/src/app
 
-RUN apt-get update -y && apt-get install -y python3-opencv
-RUN pip install opencv-python
+RUN apt-get update -y && apt-get install -y python
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
