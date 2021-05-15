@@ -58,20 +58,33 @@ def generate_timelapse_video(timelapse_images, height, width, outputFilename, fp
 
 
 def process_timelapse_video(basePath, dateToProcess=datetime.datetime.now(), hourly=False):
-    date_pattern = f"{dateToProcess.year}##{dateToProcess.month}##{dateToProcess.day}"
-    if hourly:
-        date_pattern = f"{date_pattern}##{dateToProcess.hour}"
-    image_dir = f"{basePath}/{date_pattern.replace('##', '/')}"
+    filename_pattern = get_timelapse_filename_folder_pattern(dateToProcess, hourly)
+    
+    image_dir = f"{basePath}/{filename_pattern.replace('##', '/')}"
+    if not os.path.exists(image_dir):
+        print(f"Skipping timelapse video process. '{image_dir}' folder not found")
+        return
+    
+    video_filename = f"tl_{filename_pattern.replace('##', '_')}.mp4"
+    video_file_full_path = os.path.join(image_dir, video_filename)
+    if os.path.isfile(video_file_full_path):
+        print(f"Skipping timelapse video process. 'Video '{video_file_full_path}' already exists.")
+        return
 
-    video_filename = f"tl_{date_pattern.replace('##', '_')}.mp4"
     timelapse_images = get_image_files(image_dir, "jpg")
     if len(timelapse_images) > 0:
         print(f"Generating '{video_filename}' in '{image_dir}'")
         generate_timelapse_video(
-            timelapse_images, 2048, 1536, video_filename)
+            timelapse_images, 2048, 1536, video_file_full_path)
     else:
         print("No images to generate video")
+    
+def get_timelapse_filename_folder_pattern(dateToProcess=datetime.datetime.now(), hourly=False):
+    date_pattern = f"{dateToProcess.year}##{dateToProcess.month}##{dateToProcess.day}"
+    if hourly:
+        date_pattern = f"{date_pattern}##{dateToProcess.hour}"
 
+    return date_pattern
 
 def run_loop(basePath, pause, config):
     runHour = config["runHour"]
@@ -90,7 +103,7 @@ def run_loop(basePath, pause, config):
             hours_added = datetime.timedelta(hours=pause)
             print(
                 f"Timelapse video generator paused until {datetime.datetime.now() + hours_added}")
-            time.sleep(pause*60*24)
+            time.sleep(pause*60*60)
 
 
 if(__name__ == '__main__'):
